@@ -1,2 +1,0 @@
-(defun gen-number (start end)
-  (+ start (random (- end start))))
