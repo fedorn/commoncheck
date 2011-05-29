@@ -30,11 +30,12 @@
   result)
 
 (defmacro check-for-all (bindings &body forms)
+  "Check each expression in 'forms' for all generated values"
   `(combine-results
      ,@(loop for f in forms collect
 	    `(combine-results ,@(loop repeat 10 collect
 				     `(let ,bindings
-					(format t "for ~{~a ~}~%"
-						(mapcar #'first ',bindings))
+					(format t "for ~@{~{~a = ~a~}~^, ~}~%"
+						,@(mapcar #'(lambda (x) `(list ',(first x) ,(first x))) bindings))
 					(check ,f)))))))
 
