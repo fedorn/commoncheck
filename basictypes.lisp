@@ -6,8 +6,8 @@
 
 (deftest fail-num-test ()
   "Test basic number operations properties"
-  (check-for-all ((a (gen-number 5 10))
-		  (b (gen-number -5 5)))
+  (check-for-all ((a (gen-number :start 5 :end 10))
+		  (b (gen-number :start -5 :end 5)))
     (= (+ a b) (+ b a))
     (= (- a b) (- b a))
     ))
