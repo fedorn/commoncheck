@@ -29,13 +29,20 @@
   (format t "~:[FAIL~;pass~] ... ~a: ~a~%" result *test-name* form)
   result)
 
+(defvar *num-tests* 10)
+
 (defmacro check-for-all (bindings &body forms)
   "Check each expression in 'forms' for all generated values"
-  `(combine-results
-     ,@(loop for f in forms collect
-	    `(combine-results ,@(loop repeat 10 collect
-				     `(let ,bindings
-					(format t "for ~@{~{~a = ~a~}~^, ~}~%"
-						,@(mapcar #'(lambda (x) `(list ',(first x) ,(first x))) bindings))
-					(check ,f)))))))
+  (let ((new-bindings (mapcar #'(lambda (x) (list (first x) (second x))) bindings)))
+    `(combine-results
+       ,@(loop for f in forms collect
+	      `(combine-results
+		 ,@(loop repeat *num-tests* collect
+			`(let ,new-bindings
+			   (format t "~%for ~@{~{~a = ~a~}~^, ~}~%"
+				   ,@(mapcar
+				      #'(lambda (x)
+					  `(list ',(first x) ,(first x)))
+				      bindings))
+			   (report-result ,f ',f))))))))
 

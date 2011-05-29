@@ -43,5 +43,5 @@ Usage examples:
   (append (cdr l) (list (car l))))
 
 (deftest fail-list-test ()
-  (check-for-all ((l (gen-list #'gen-number)))
+  (check-for-all ((l (gen-list #'gen-number) (shrink-list)))
     (equalp l (reverse-list-fail (reverse-list-fail l)))))
