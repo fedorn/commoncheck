@@ -29,8 +29,10 @@
   (format t "~:[FAIL~;pass~] ... ~a: ~a~%" result *test-name* form)
   result)
 
-(defmacro check-for-all (bindings &body body)
-  `(check ,@(loop repeat 100 collect
-       `(let ,bindings
-	  ,@body))))
-	 
+(defmacro check-for-all (bindings &body forms)
+  `(combine-results
+     ,@(loop for f in forms collect
+	    `(combine-results ,@(loop repeat 100 collect
+				     `(let ,bindings
+					(check ,f)))))))
+
