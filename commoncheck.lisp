@@ -28,3 +28,9 @@
   "Report the results of a single test case. Called by 'check'."
   (format t "~:[FAIL~;pass~] ... ~a: ~a~%" result *test-name* form)
   result)
+
+(defmacro check-for-all (bindings &body body)
+  `(check ,@(loop repeat 100 collect
+       `(let ,bindings
+	  ,@body))))
+	 
