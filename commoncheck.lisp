@@ -32,7 +32,9 @@
 (defmacro check-for-all (bindings &body forms)
   `(combine-results
      ,@(loop for f in forms collect
-	    `(combine-results ,@(loop repeat 100 collect
+	    `(combine-results ,@(loop repeat 10 collect
 				     `(let ,bindings
+					(format t "for ~{~a ~}~%"
+						(mapcar #'first ',bindings))
 					(check ,f)))))))
 
